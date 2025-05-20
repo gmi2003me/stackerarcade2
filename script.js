@@ -5,6 +5,8 @@ const startStopButton = document.getElementById('start-stop-button');
 const takeMinorPrizeButton = document.getElementById('take-minor-prize-button');
 const messageArea = document.getElementById('message-area');
 const winMessage = document.getElementById('win-message');
+const preGameOverlay = document.getElementById('pre-game-overlay');
+const overlayStartButton = document.getElementById('overlay-start-button');
 
 const BOARD_WIDTH = 7;
 const BOARD_HEIGHT = 15;
@@ -275,6 +277,7 @@ function startGame() {
     placedBlocks = [];
     winMessage.style.display = 'none';
     startStopButton.disabled = true; // Will be enabled in startNewRound
+    preGameOverlay.style.display = 'none'; // Hide the overlay
 
     createBoard(); // Initialize board cells
     startNewRound();
@@ -357,4 +360,17 @@ document.addEventListener('keydown', (event) => {
 // Initial setup
 createBoard(); // Draw the board initially so prize lines are visible
 updateDisplay();
-messageArea.textContent = "Click Start to Play!"; 
+messageArea.textContent = "Click Start to Play!";
+
+// Add event listener for the overlay start button
+overlayStartButton.addEventListener('click', () => {
+    startGame();
+});
+
+// Add keyboard event listener for the overlay start button
+document.addEventListener('keydown', (event) => {
+    if (event.code === 'Space' && preGameOverlay.style.display !== 'none') {
+        event.preventDefault(); // Prevent page scrolling
+        startGame();
+    }
+}); 
