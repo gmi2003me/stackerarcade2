@@ -1,0 +1,154 @@
+body {
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #2c3e50; /* Dark blue-gray background */
+    margin: 0;
+    color: #ecf0f1; /* Light gray text */
+}
+
+.container {
+    text-align: center;
+    background-color: #34495e; /* Slightly lighter blue-gray for container */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+}
+
+h1 {
+    color: #e74c3c; /* Reddish title */
+}
+
+.game-info {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+}
+
+#game-board {
+    display: grid;
+    grid-template-columns: repeat(7, 40px); /* 7 columns for blocks */
+    grid-template-rows: repeat(15, 30px);  /* 15 rows */
+    gap: 2px;
+    background-color: #2c3e50; /* Darker background for the board itself */
+    border: 5px solid #7f8c8d; /* Gray border */
+    margin: 0 auto 20px auto; /* Center the board */
+    width: calc(7 * 40px + 6 * 2px); /* Calculate width based on columns and gaps */
+    height: calc(15 * 30px + 14 * 2px); /* Calculate height based on rows and gaps */
+    position: relative; /* For prize lines */
+}
+
+.block {
+    background-color: #f1c40f; /* Yellow blocks */
+    border-radius: 3px;
+}
+
+.active-block {
+    background-color: #e67e22; /* Orange for moving blocks */
+}
+
+.placed-block {
+    background-color: #2ecc71; /* Green for successfully placed blocks */
+}
+
+.prize-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: white;
+    z-index: 1; /* Ensure lines are visible but behind blocks if needed */
+}
+
+.prize-label {
+    position: absolute;
+    left: 5px; /* Position from the left edge of the game board */
+    font-size: 0.7em;
+    font-weight: bold;
+    padding: 1px 3px;
+    border-radius: 2px;
+    z-index: 2; /* Ensure labels are above lines */
+    pointer-events: none; /* So they don't interfere with game clicks if any */
+}
+
+#minor-prize-line {
+    bottom: calc(4 * 30px + 3 * 2px); /* Corresponds to after 11th row from bottom (15 - 11 = 4th from top) */
+    /* (15 rows total - 11th row is target, so line is above row 10, below row 11 from bottom )*/
+    /* JS will count rows 0-14 from bottom. Minor prize at row 10. Line above row 10. */
+    /* Row 10 means 10 * 30px + 9 * 2px from the bottom of blocks. Line slightly above that. */
+    /* Let's adjust based on grid-template-rows: 15 rows, 30px each. 11th row from bottom is index 10. */
+    /* Line is above the 11th row, which means it's on top of the 10th row from the bottom. */
+    /* Board height: 15 rows * 30px height + 14 * 2px gap = 450 + 28 = 478px */
+    /* Level 11 means 11 rows successfully stacked. The line is *above* the 11th successfully stacked row. */
+    /* So, it is visually after the 11th cell row from the bottom. */
+    /* 11 rows * 30px/row + 10 gaps * 2px/gap = 330 + 20 = 350px from bottom edge of board */
+    /* If grid rows are 0-14 from top, minor prize at 15 - 11 = 4th row from top. Line below this (row index 4) */
+}
+
+#major-prize-line {
+    bottom: calc(15 * 30px + 14 * 2px - 2px); /* At the very top */
+    /* Line is above the 15th row. Effectively the top border. */
+}
+
+.controls button {
+    background-color: #e74c3c; /* Reddish buttons */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+.controls button:hover {
+    background-color: #c0392b; /* Darker red on hover */
+}
+
+.controls button:disabled {
+    background-color: #95a5a6; /* Gray for disabled buttons */
+    cursor: not-allowed;
+}
+
+#message-area {
+    margin-top: 15px;
+    min-height: 20px; /* Reserve space for messages */
+    font-size: 1.1em;
+    color: #f39c12; /* Orange for messages */
+}
+
+#win-message {
+    font-size: 5em;
+    font-weight: bold;
+    color: #f1c40f; /* Yellow win message */
+    text-shadow: 0 0 10px #f1c40f, 0 0 20px #f1c40f, 0 0 30px #e67e22;
+    animation: flash 1s infinite alternate;
+}
+
+@keyframes flash {
+    from { opacity: 1; }
+    to { opacity: 0.5; }
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    #game-board {
+        grid-template-columns: repeat(7, 30px);
+        grid-template-rows: repeat(15, 25px);
+        width: calc(7 * 30px + 6 * 2px);
+        height: calc(15 * 25px + 14 * 2px);
+    }
+
+    .controls button {
+        padding: 8px 15px;
+        font-size: 0.9em;
+    }
+
+    h1 {
+        font-size: 1.8em;
+    }
+} 
